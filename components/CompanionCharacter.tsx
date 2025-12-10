@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import SpriteAnimation from "@/components/SpriteAnimation";
 import { swordsmanSpriteConfig } from "@/data/swordsmanSprites";
 
@@ -84,7 +84,7 @@ export default function CompanionCharacter({
     }
   };
 
-  const showBubble = (text: string, duration: number = 4000) => {
+  const showBubble = useCallback((text: string, duration: number = 4000) => {
     clearSpeechTimer();
     const id = Date.now();
     setSpeechBubble({ text, id });
@@ -92,12 +92,12 @@ export default function CompanionCharacter({
       setSpeechBubble(null);
       speechTimerRef.current = null;
     }, duration);
-  };
+  }, []);
 
   const getRandomPhrase = (phrases: string[]) =>
     phrases[Math.floor(Math.random() * phrases.length)];
 
-  const selectAmbientAction = (): AmbientAction => {
+  const selectAmbientAction = useCallback((): AmbientAction => {
     const availableActions: AmbientAction[] = [];
     if (lastAmbientAction !== "taunt") availableActions.push("taunt");
     if (lastAmbientAction !== "patrol") availableActions.push("patrol");
@@ -135,7 +135,7 @@ export default function CompanionCharacter({
     }
 
     return action;
-  };
+  }, [lastAmbientAction]);
 
   useEffect(() => {
     const isIdleAnimation = currentAnimation === "idle" || currentAnimation === "idleAtk";
@@ -244,7 +244,7 @@ export default function CompanionCharacter({
     return () => {
       clearAllTimers();
     };
-  }, [hp, knightState, isHovered, currentAnimation, lastAmbientAction]);
+  }, [hp, knightState, isHovered, currentAnimation, lastAmbientAction, showBubble, selectAmbientAction]);
 
   const handleMouseEnter = () => {
     if (hp === 0) return;
@@ -330,7 +330,7 @@ export default function CompanionCharacter({
         }, 500);
       }
     }
-  }, [hp, knightState, hasScrolledToContact]);
+  }, [hp, knightState, hasScrolledToContact, showBubble]);
 
   const handleDeathFinished = () => {
     if (hp === 0 && knightState === "death") {

@@ -41,7 +41,7 @@ export default function ContactSection() {
           transition={{ duration: 0.6 }}
           className="text-4xl md:text-5xl font-bold mb-4 text-center"
         >
-          Let's build something
+          Let&apos;s build something
         </motion.h2>
 
         <motion.p

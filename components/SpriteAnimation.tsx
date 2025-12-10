@@ -135,7 +135,7 @@ export default function SpriteAnimation({
   if (!animDef) {
     return (
       <div className={className} style={style}>
-        <div className="text-xs text-red-500">Animation "{animation}" not found</div>
+        <div className="text-xs text-red-500">Animation &quot;{animation}&quot; not found</div>
       </div>
     );
   }
@@ -162,6 +162,7 @@ export default function SpriteAnimation({
       }}
     >
       {/* Hidden img to preload - track current src for reloading */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         key={effectiveSrc}
         src={effectiveSrc}
